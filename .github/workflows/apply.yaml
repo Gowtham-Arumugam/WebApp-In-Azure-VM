@@ -35,6 +35,6 @@ jobs:
             TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
             TF_VAR_zone_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
       - name: Output results
-        run: echo ${{ steps.apply.outputs.ip }}
+        run: echo "${{ steps.apply.outputs.ip }}"
 
 
