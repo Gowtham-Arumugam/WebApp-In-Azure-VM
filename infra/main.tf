@@ -2,7 +2,7 @@ resource "azurerm_resource_group" "RG1" {
   name     = "learn-terraform-rg-${formatdate("DD-MMM", timestamp())}"
   location = "eastus"
   lifecycle {
-    ignore_changes = [ name ]
+    ignore_changes = [name]
   }
 }
 resource "azurerm_virtual_network" "vnet" {
@@ -59,7 +59,7 @@ resource "azurerm_network_security_group" "nsg" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
-# 
+  # 
 }
 resource "azurerm_linux_virtual_machine" "vm" {
   name                            = "vm1"
@@ -99,16 +99,43 @@ resource "azurerm_subnet_network_security_group_association" "subnet_nsg_associa
 }
 
 resource "cloudflare_dns_record" "gowtham_living" {
-  zone_id         = "${var.zone_ID}"
-  name            = "webKGKJGBJSDFSSDFSapp.gowtham.living"
+  zone_id         = var.zone_ID
+  name            = "*.gowtham.living"
   ttl             = 60
   type            = "A"
   comment         = "Domain verification record"
-  content         = "2.2.2.2" #azurerm_public_ip.publicIP.ip_address
+  content         = azurerm_public_ip.publicIP.ip_address
   private_routing = false
   proxied         = false
   settings = {
     ipv4_only = false
     ipv6_only = false
   }
+}
+resource "time_sleep" "sleepfor200s" {
+  depends_on      = [azurerm_linux_virtual_machine.vm]
+  create_duration = "200s"
+
+}
+resource "null_resource" "setup_webapps" {
+  depends_on = [time_sleep.sleepfor200s]
+  connection {
+    type     = "ssh"
+    host     = azurerm_public_ip.publicIP.ip_address
+    user     = var.admin_username
+    password = var.admin_password
+    timeout  = "5m"
+  }
+  provisioner "file" {
+    source      = "${path.module}/scripts/webapp1"
+    destination = "/tmp/default"    
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo cp /tmp/default /etc/nginx/sites-enabled/default",
+      "sudo systemctl restart nginx"
+      
+    ]
+  }
+
 }

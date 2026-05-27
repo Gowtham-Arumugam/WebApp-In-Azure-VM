@@ -13,4 +13,6 @@ packages:
 
 runcmd:
   - systemctl start nginx
+  - mkdir -p /var/www/webapp1
+  - echo "<h1>My NGINX Site - Web App 1</h1>" | sudo tee /var/www/webapp1/index.html
   - systemctl enable nginx

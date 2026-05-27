@@ -1,0 +1,18 @@
+server {
+    listen 80 default_server;
+    server_name _;
+
+    return 444;
+}
+server {
+	listen 80;
+	server_name webapp1.gowtham.living;
+
+	root /var/www/webapp1;
+	index index.html;
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+}
+#success

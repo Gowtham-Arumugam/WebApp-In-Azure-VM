@@ -20,5 +20,5 @@ variable "cloudflare_api_token" {
 variable "zone_ID" {
   description = "Cloudflare DNS zone ID"
   type        = string
-  
+
 }
