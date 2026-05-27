@@ -111,4 +111,7 @@ resource "cloudflare_dns_record" "gowtham_living" {
     ipv4_only = false
     ipv6_only = false
   }
+  provisioner "local-exec" {
+    command =  "ip=$(terraform output -raw test) >> $GITHUB_OUTPUT" #need to public IP here instead of test output
+  }
 }

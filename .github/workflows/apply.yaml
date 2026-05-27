@@ -1,4 +1,4 @@
-name: terraform apply
+name: Provision Azure Resources with Terraform
 on: workflow_dispatch
 permissions:
   id-token: write
@@ -26,12 +26,15 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # - name: Terraform Apply
-      #   run: cd infra &&terraform apply -auto-approve
-      #   env:
-      #       TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
-      #       TF_VAR_admin_username: ${{ vars.ADMIN_USERNAME }}
-      #       TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      #       TF_VAR_zone_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+      - name: Terraform Apply
+        id: apply
+        run: cd infra &&terraform apply -auto-approve terraform apply --auto-approve --target=cloudflare_dns_record.gowtham_living
+        env:
+            TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
+            TF_VAR_admin_username: ${{ vars.ADMIN_USERNAME }}
+            TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+            TF_VAR_zone_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+      - name: Output results
+        run: echo ${{ steps.apply.outputs.ip }}
 
 
