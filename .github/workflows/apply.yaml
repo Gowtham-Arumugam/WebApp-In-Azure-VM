@@ -19,16 +19,19 @@ jobs:
       - name: Terraform Init
         run: cd infra && terraform init
       
-      - name: azure login
-        uses: azure/login@v3
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      # - name: azure login
+      #   uses: azure/login@v3
+      #   with:
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Terraform Apply
         id: apply
-        run: cd infra && terraform apply --auto-approve --target=cloudflare_dns_record.gowtham_living
+        run: | 
+          cd infra
+          terraform apply --auto-approve --target=cloudflare_dns_record.gowtham_living 
+          echo "ip=$(terraform output -raw test) >> $GITHUB_OUTPUT"
         env:
             TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
             TF_VAR_admin_username: ${{ vars.ADMIN_USERNAME }}
