@@ -13,8 +13,15 @@ terraform {
       source  = "hashicorp/null"
       version = "= 3.2.1"
     }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 5"
+    }
   }
 }
 provider "azurerm" {
   features {}
+}
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
 }

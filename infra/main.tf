@@ -1,6 +1,9 @@
 resource "azurerm_resource_group" "RG1" {
-  name     = "learn-terraform-rg"
+  name     = "learn-terraform-rg-${formatdate("DD-MMM", timestamp())}"
   location = "eastus"
+  lifecycle {
+    ignore_changes = [ name ]
+  }
 }
 resource "azurerm_virtual_network" "vnet" {
   name                = "vnet1"
@@ -29,7 +32,7 @@ resource "azurerm_network_interface" "nic" {
     public_ip_address_id          = azurerm_public_ip.publicIP.id
   }
 }
-
+# 
 resource "azurerm_network_security_group" "nsg" {
   name                = "nsg1"
   resource_group_name = azurerm_resource_group.RG1.name
@@ -56,7 +59,7 @@ resource "azurerm_network_security_group" "nsg" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
-
+# 
 }
 resource "azurerm_linux_virtual_machine" "vm" {
   name                            = "vm1"
@@ -89,8 +92,23 @@ resource "azurerm_linux_virtual_machine" "vm" {
     create_before_destroy = true
   }
 }
-
+# Associate NSG with Subnet
 resource "azurerm_subnet_network_security_group_association" "subnet_nsg_association" {
   subnet_id                 = azurerm_subnet.subnet.id
   network_security_group_id = azurerm_network_security_group.nsg.id
+}
+
+resource "cloudflare_dns_record" "gowtham_living" {
+  zone_id         = "${var.zone_ID}"
+  name            = "webapp.gowtham.living"
+  ttl             = 60
+  type            = "A"
+  comment         = "Domain verification record"
+  content         = "2.2.2.2" #azurerm_public_ip.publicIP.ip_address
+  private_routing = false
+  proxied         = false
+  settings = {
+    ipv4_only = false
+    ipv6_only = false
+  }
 }
