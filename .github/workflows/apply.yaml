@@ -31,7 +31,7 @@ jobs:
         run: cd infra && terraform apply --auto-approve
         env:
             TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
-            TF_VAR_admin_username: ${{ vars.ADMIN_USERNAME }}
+            TF_VAR_admin_username: ${{ secrets.ADMIN_USERNAME }}
             TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
             TF_VAR_zone_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
 
