@@ -100,7 +100,7 @@ resource "azurerm_subnet_network_security_group_association" "subnet_nsg_associa
 
 resource "cloudflare_dns_record" "gowtham_living" {
   zone_id         = "${var.zone_ID}"
-  name            = "webapp.gowtham.living"
+  name            = "webKGKJGBJapp.gowtham.living"
   ttl             = 60
   type            = "A"
   comment         = "Domain verification record"
@@ -110,8 +110,5 @@ resource "cloudflare_dns_record" "gowtham_living" {
   settings = {
     ipv4_only = false
     ipv6_only = false
-  }
-  provisioner "local-exec" {
-    command =  "ip=$(terraform output -raw test) >> $GITHUB_OUTPUT" #need to public IP here instead of test output
   }
 }
