@@ -28,7 +28,7 @@ jobs:
 
       - name: Terraform Apply
         id: apply
-        run: cd infra &&terraform apply -auto-approve terraform apply --auto-approve --target=cloudflare_dns_record.gowtham_living
+        run: cd infra && terraform apply -auto-approve terraform apply --auto-approve --target=cloudflare_dns_record.gowtham_living
         env:
             TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
             TF_VAR_admin_username: ${{ vars.ADMIN_USERNAME }}
