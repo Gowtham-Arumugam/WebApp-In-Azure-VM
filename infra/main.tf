@@ -100,7 +100,7 @@ resource "azurerm_subnet_network_security_group_association" "subnet_nsg_associa
 
 resource "cloudflare_dns_record" "gowtham_living" {
   zone_id         = "${var.zone_ID}"
-  name            = "webKGKJGBJSDFSapp.gowtham.living"
+  name            = "webKGKJGBJSDFSSDFSapp.gowtham.living"
   ttl             = 60
   type            = "A"
   comment         = "Domain verification record"

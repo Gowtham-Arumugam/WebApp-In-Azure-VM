@@ -31,7 +31,7 @@ jobs:
         run: | 
           cd infra
           terraform apply --auto-approve --target=cloudflare_dns_record.gowtham_living 
-          echo "ip=$(terraform output -raw test) >> $GITHUB_OUTPUT"
+          echo "ip=$(terraform output -raw test)" >> $GITHUB_OUTPUT
         env:
             TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
             TF_VAR_admin_username: ${{ vars.ADMIN_USERNAME }}
